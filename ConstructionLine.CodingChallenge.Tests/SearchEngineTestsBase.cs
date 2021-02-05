@@ -39,7 +39,7 @@ namespace ConstructionLine.CodingChallenge.Tests
 
                 var expectedSizeCount = shirts
                     .Count(s => s.Size.Id == size.Id
-                                && (!searchOptions.Colors.Any() || searchOptions.Colors.Select(c => c.Id).Contains(s.Color.Id)));
+                                && MatchingShirt(s, searchOptions));
 
                 Assert.That(sizeCount.Count, Is.EqualTo(expectedSizeCount), 
                     $"Size count for '{sizeCount.Size.Name}' showing '{sizeCount.Count}' should be '{expectedSizeCount}'");
@@ -57,12 +57,19 @@ namespace ConstructionLine.CodingChallenge.Tests
                 Assert.That(colorCount, Is.Not.Null, $"Color count for '{color.Name}' not found in results");
 
                 var expectedColorCount = shirts
-                    .Count(c => c.Color.Id == color.Id  
-                                && (!searchOptions.Sizes.Any() || searchOptions.Sizes.Select(s => s.Id).Contains(c.Size.Id)));
+                    .Count(s => s.Color.Id == color.Id  
+                                && MatchingShirt(s, searchOptions));
 
                 Assert.That(colorCount.Count, Is.EqualTo(expectedColorCount),
                     $"Color count for '{colorCount.Color.Name}' showing '{colorCount.Count}' should be '{expectedColorCount}'");
             }
+        }
+
+        private static bool MatchingShirt(Shirt shirt, SearchOptions searchOptions)
+        {
+            return
+                (searchOptions.Colors.Select(c => c.Id).Contains(shirt.Color.Id) || !searchOptions.Colors.Any()) &&
+                (searchOptions.Sizes.Select(s => s.Id).Contains(shirt.Size.Id) || !searchOptions.Sizes.Any());
         }
     }
 }

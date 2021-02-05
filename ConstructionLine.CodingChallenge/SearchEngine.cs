@@ -29,13 +29,12 @@ namespace ConstructionLine.CodingChallenge
             foreach (Shirt shirt in _shirts)
             {
                 if (colorIds.Contains(shirt.Color.Id) && sizeIds.Contains(shirt.Size.Id))
+                {
                     shirts.Add(shirt);
 
-                if (colorIds.Contains(shirt.Color.Id))
-                    sizeCounts[shirt.Size].Count++;
-
-                if (sizeIds.Contains(shirt.Size.Id))
                     colorCounts[shirt.Color].Count++;
+                    sizeCounts[shirt.Size].Count++;
+                }
             }
 
             return new SearchResults
